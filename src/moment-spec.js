@@ -111,20 +111,21 @@
         specification.call(this, fn);
         return fn._applyTo(this);
     }
-
-    // https://en.wikipedia.org/wiki/Computus
+    
+    // https://www.irt.org/articles/js052/index.htm
     moment.fn.spec.getEasterSunday = function (year) {
-        var num = year % 19;
-        var num1 = year / 100;
-        var num2 = (num1 - num1 / 4 - (8 * num1 + 13) / 25 + 19 * num + 15) % 30;
-        var num3 = num2 - num2 / 28 * (1 - num2 / 28 * (29 / (num2 + 1)) * ((21 - num) / 11));
-        var num4 = num3 - (year + year / 4 + num3 + 2 - num1 + num1 / 4) % 7 + 28;
-        var num5 = 3;
-        if (num4 > 31) {
-            num5++;
-            num4 = num4 - 31;
-        }
-        return moment([year, num5 - 1, num4]);
+        var C = Math.floor(year / 100);
+        var N = year - 19 * Math.floor(year / 19);
+        var K = Math.floor((C - 17) / 25);
+        var I = C - Math.floor(C / 4) - Math.floor((C - K) / 3) + 19 * N + 15;
+        I = I - 30 * Math.floor((I / 30));
+        I = I - Math.floor(I / 28) * (1 - Math.floor(I / 28) * Math.floor(29 / (I + 1)) * Math.floor((21 - N) / 11));
+        var J = year + Math.floor(year / 4) + I + 2 - C + Math.floor(C / 4);
+        J = J - 7 * Math.floor(J / 7);
+        var L = I - J;
+        var month = 3 + Math.floor((L + 40) / 44);
+        var day = L + 28 - 31 * Math.floor(month / 4);
+        return moment([year, month - 1, day]);
     }
 
 }).call(this);

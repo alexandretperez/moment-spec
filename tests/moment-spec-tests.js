@@ -1,7 +1,5 @@
-﻿/// <reference path="../scripts/jasmine/jasmine.js" />
-/// <reference path="../scripts/moment/moment.js" />
-/// <reference path="../scripts/moment/moment-pt-br.js" />
-/// <reference path="../src/moment-spec.js" />
+﻿var moment = require("moment");
+var mSpec = require("../src/moment-spec");
 
 describe("Weekends Tests", function () {
 
@@ -142,53 +140,60 @@ describe("Avoid Specific Dates and all Weekends (PT-BR)", function () {
 
         rule.avoid("sábado", "domingo")
             .avoid(brazilianFixedHolidays)
-            .avoid(brazilianHolidaysBasedOnEasterSunday);
+            .avoid(brazilianHolidaysBasedOnEasterSunday)
+            .range("month");
     }
 
+    var L = "DD/MM/YYYY";
     it("avoid January 1", function () {
-        expect(moment([2016, 0, 1]).spec(MyCompanyCalendar).format("L")).toBe("04/01/2016");
+        expect(moment([2016, 0, 1]).spec(MyCompanyCalendar).format(L)).toBe("04/01/2016");
     });
 
     it("avoid April 21", function () {
-        expect(moment([2016, 3, 21]).spec(MyCompanyCalendar).format("L")).toBe("22/04/2016");
+        expect(moment([2016, 3, 21]).spec(MyCompanyCalendar).format(L)).toBe("22/04/2016");
     });
 
     it("avoid May 1", function () {
-        expect(moment([2016, 4, 1]).spec(MyCompanyCalendar).format("L")).toBe("02/05/2016");
+        expect(moment([2016, 4, 1]).spec(MyCompanyCalendar).format(L)).toBe("02/05/2016");
     });
 
     it("avoid September 7", function () {
-        expect(moment([2016, 8, 7]).spec(MyCompanyCalendar).format("L")).toBe("08/09/2016");
+        expect(moment([2016, 8, 7]).spec(MyCompanyCalendar).format(L)).toBe("08/09/2016");
     });
 
     it("avoid October 12", function () {
-        expect(moment([2016, 9, 12]).spec(MyCompanyCalendar).format("L")).toBe("13/10/2016");
+        expect(moment([2016, 9, 12]).spec(MyCompanyCalendar).format(L)).toBe("13/10/2016");
     });
 
     it("avoid November 2", function () {
-        expect(moment([2016, 10, 2]).spec(MyCompanyCalendar).format("L")).toBe("03/11/2016");
+        expect(moment([2016, 10, 2]).spec(MyCompanyCalendar).format(L)).toBe("03/11/2016");
     });
 
     it("avoid November 15", function () {
-        expect(moment([2016, 10, 15]).spec(MyCompanyCalendar).format("L")).toBe("16/11/2016");
+        expect(moment([2016, 10, 15]).spec(MyCompanyCalendar).format(L)).toBe("16/11/2016");
     });
 
     it("avoid November 15", function () {
-        expect(moment([2016, 11, 25]).spec(MyCompanyCalendar).format("L")).toBe("26/12/2016");
+        expect(moment([2016, 11, 25]).spec(MyCompanyCalendar).format(L)).toBe("26/12/2016");
     });
 
-    it("avoid Carnaval", function () {
+    it("avoid Carnaval 2016", function () {
         var easter = moment.fn.spec.getEasterSunday(2016);
-        expect(easter.clone().add(-47, "days").spec(MyCompanyCalendar).format("L")).toBe("10/02/2016");
+        expect(easter.subtract(47, "days").spec(MyCompanyCalendar).format(L)).toBe("10/02/2016");
+    });
+
+    it("avoid Carnaval 2017", function () {
+        var easter = moment.fn.spec.getEasterSunday(2017);
+        expect(easter.subtract(47, "days").spec(MyCompanyCalendar).format(L)).toBe("27/02/2017");
     });
 
     it("avoid Sexta-feira Santa (Good Friday)", function () {
         var easter = moment.fn.spec.getEasterSunday(2016);
-        expect(easter.clone().add(-2, "days").spec(MyCompanyCalendar).format("L")).toBe("28/03/2016");
+        expect(easter.subtract(2, "days").spec(MyCompanyCalendar).format(L)).toBe("28/03/2016");
     });
 
     it("avoid Corpus Christi", function () {
         var easter = moment.fn.spec.getEasterSunday(2016);
-        expect(easter.clone().add(60, "days").spec(MyCompanyCalendar).format("L")).toBe("27/05/2016");
+        expect(easter.add(60, "days").spec(MyCompanyCalendar).format(L)).toBe("27/05/2016");
     });
 });

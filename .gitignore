@@ -21,6 +21,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+spec/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -254,3 +255,7 @@ paket-files/
 /packages.config
 /scripts
 /content/jasmine
+/spec/support
+/package.json
+/spec/support/jasmine.json
+*.json
